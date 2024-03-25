@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"format": "prettier . --write --plugin=prettier-plugin-solidity '**/*.sol'"
+		"format": "prettier . --write --plugin=prettier-plugin-solidity '**/*.sol'",
+		"lint": "eslint ."
 	},
 	"keywords": [],
 	"author": "",

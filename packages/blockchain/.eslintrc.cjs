@@ -1,7 +1,7 @@
 module.exports = {
 	root: true,
 	env: { browser: true, es2020: true },
-	extends: ['@honest-nft/eslint-config-shared', 'plugin:react-hooks/recommended'],
+	extends: ['@honest-nft/eslint-config-shared'],
 	ignorePatterns: ['dist', '.eslintrc.cjs'],
 	parser: '@typescript-eslint/parser',
 	plugins: ['react-refresh'],
