@@ -1,0 +1,56 @@
+# Honest NFT
+
+**Honest NFT** is an Ethereum-based project that combines an **ERC721 smart contract** with a **React front end** to create a decentralized application (DApp) for minting and trading Non-Fungible Tokens (NFTs). Let's break down the components:
+
+1. **Smart Contract (Solidity)**
+   - The **ERC721** standard ensures that each NFT is unique and indivisible.
+   - Trust is established through code, making it transparent and tamper-proof.
+   - Users can mint new NFTs, and the contract enforces their authenticity.
+
+2. **Front End (React)**
+   - The front end provides a user-friendly interface for interacting with Honest NFT.
+   - Key features include:
+     - **Minting NFTs**: Users can create their own NFTs.
+     - **Backoffice UI**: An administrative interface for managing the NFT drop.
+     - **Marketplace**: Users can trade NFTs.
+
+## Getting Started
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/your-username/honest-nft.git
+   cd honest-nft
+   ```
+
+2. **Install Dependencies for the Front End:**
+   ```bash
+   cd client
+   npm install
+   ```
+
+3. **Start the React Development Server:**
+   ```bash
+   npm start
+   ```
+
+4. **Deploy the Smart Contract:**
+   - Use **Hardhat** to manage the project.
+   - Update the `hardhat.config.js` file with your network configuration.
+   - Compile and deploy the smart contract:
+     ```bash
+     npx hardhat compile
+     npx hardhat run scripts/deploy.js --network sepolia
+     ```
+
+## Usage
+
+- Visit the front end in your browser (usually at `http://localhost:3000`) and connect your Ethereum wallet (e.g., MetaMask).
+- Mint new NFTs or explore the marketplace.
+
+## Contributing
+
+Contributions are welcome! Please create a pull request with your changes.
+
+## License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.

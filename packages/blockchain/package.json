@@ -1,0 +1,27 @@
+{
+  "name": "@honest-nft/blockchain",
+  "version": "1.0.0",
+  "description": "An implementation of an honest NFT.",
+  "main": "index.js",
+  "scripts": {
+    "accounts": "hardhat run scripts/accounts.ts",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "start": "hardhat node"
+  },
+  "keywords": [
+    "ethereum",
+    "solidity",
+    "nft"
+  ],
+  "author": "Antão Almada",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "hardhat": "^2.22.2",
+    "hardhat-gas-reporter": "^2.0.2"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2"
+  }
+}
