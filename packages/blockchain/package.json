@@ -1,7 +1,7 @@
 {
 	"name": "@honest-nft/blockchain",
 	"version": "1.0.0",
-	"description": "An implementation of an honest NFT.",
+	"description": "An implementation of an ERC721 featuring contract-based fairness and trust mechanisms.",
 	"main": "index.js",
 	"scripts": {
 		"accounts": "hardhat run scripts/accounts.ts",
@@ -10,19 +10,19 @@
 		"start": "hardhat node"
 	},
 	"keywords": [
+		"web3",
 		"ethereum",
-		"solidity",
 		"nft"
 	],
 	"author": "Antão Almada",
 	"license": "MIT",
 	"devDependencies": {
+		"@honest-nft/eslint-config-shared": "workspace:^",
 		"@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
 		"hardhat": "^2.22.2",
 		"hardhat-gas-reporter": "^2.0.2"
 	},
 	"dependencies": {
-		"@honest-nft/eslint-config-shared": "workspace:^",
 		"@openzeppelin/contracts": "^5.0.2"
 	}
 }

@@ -1,4 +1,4 @@
-import { parseEther, formatEther } from 'viem';
+import { formatEther } from 'viem';
 import hre from 'hardhat';
 
 // prints the balance of all accounts

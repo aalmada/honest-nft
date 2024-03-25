@@ -10,11 +10,18 @@ contract HonestNft is ERC721, ERC721Pausable, AccessControlEnumerable {
 	bytes32 public immutable ADMIN_ROLE = keccak256('ADMIN_ROLE');
 	bytes32 public immutable MANAGER_ROLE = keccak256('MANAGER_ROLE');
 
-	constructor() ERC721('HonestNFT', 'HNST') {
-		_setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);
-		_setRoleAdmin(MANAGER_ROLE, ADMIN_ROLE);
+	constructor() 
+		ERC721('Honest NFT', 'HNST') 
+	{
+		// // set ADMIN_ROLE as the admin of all roles
+		// _setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);
+		// _setRoleAdmin(MANAGER_ROLE, ADMIN_ROLE);
 
-		grantRole(ADMIN_ROLE, _msgSender());
+		// // set the deployer as the default admin
+		// grantRole(ADMIN_ROLE, _msgSender());
+
+		// starts paused
+		_pause();
 	}
 
 	function pause() public onlyRole(ADMIN_ROLE) {

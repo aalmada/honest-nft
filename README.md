@@ -20,31 +20,31 @@
 1. **Clone the Repository:**
 
     ```bash
-    git clone https://github.com/your-username/honest-nft.git
+    git clone https://github.com/aalmada/honest-nft.git
     cd honest-nft
     ```
 
-2. **Install Dependencies for the Front End:**
+2. **Install Dependencies:**
 
     ```bash
-    cd client
-    npm install
+    pnpm install
     ```
 
-3. **Start the React Development Server:**
+3. **Deploy the Smart Contract:**
 
-    ```bash
-    npm start
-    ```
-
-4. **Deploy the Smart Contract:**
-    - Use **Hardhat** to manage the project.
-    - Update the `hardhat.config.js` file with your network configuration.
     - Compile and deploy the smart contract:
         ```bash
-        npx hardhat compile
-        npx hardhat run scripts/deploy.js --network sepolia
+        cd packages/blockchain
+        pnpm compile
+        pnpm hardhat run scripts/deploy.js --network sepolia
         ```
+
+4. **Start the React Development Server:**
+
+    ```bash
+    cd packages/frontend
+    pnpm start
+    ```
 
 ## Usage
 
