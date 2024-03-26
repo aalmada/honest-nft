@@ -1,0 +1,41 @@
+on:
+    push:
+
+jobs:
+    build:
+        runs-on: ubuntu-20.04
+        strategy:
+            matrix:
+                node-version: [18]
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: pnpm/action-setup@v3
+              with:
+                  version: 8
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install´
+
+            - name: Build contracts
+              working-directory: ./packages/blockchain
+              run: pnpm run build
+
+            - name: Test contracts
+              working-directory: ./packages/blockchain
+              run: pnpm run test
+
+            - name: Build frontend
+              working-directory: ./packages/frontend
+              run: pnpm run build
+
+            - name: Test frontend
+              working-directory: ./packages/frontend
+              run: pnpm run test
