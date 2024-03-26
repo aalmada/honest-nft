@@ -33,6 +33,9 @@ importers:
       '@nomicfoundation/hardhat-toolbox-viem':
         specifier: ^3.0.0
         version: 3.0.0(@nomicfoundation/hardhat-ignition-viem@0.15.0)(@nomicfoundation/hardhat-network-helpers@1.0.10)(@nomicfoundation/hardhat-verify@2.0.5)(@nomicfoundation/hardhat-viem@2.0.0)(@types/chai-as-promised@7.1.8)(@types/chai@4.3.14)(@types/mocha@10.0.6)(@types/node@20.11.30)(chai@4.4.1)(hardhat-gas-reporter@2.0.2)(hardhat@2.22.2)(solidity-coverage@0.8.11)(ts-node@10.9.2)(typescript@5.4.3)(viem@2.9.0)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       hardhat:
         specifier: ^2.22.2
         version: 2.22.2(ts-node@10.9.2)(typescript@5.4.3)
@@ -6243,6 +6246,11 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       esutils: 2.0.3
+    dev: true
+
+  /dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
     dev: true
 
   /duplexify@4.1.3:
