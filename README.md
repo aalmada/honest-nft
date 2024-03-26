@@ -1,6 +1,6 @@
 # Honest NFT
 
-**Honest NFT** is an Ethereum-based project that combines an **ERC721 smart contract** with a **React front end** to create a decentralized application (DApp) for minting and trading Non-Fungible Tokens (NFTs). Let's break down the components:
+**Honest NFT** is an Ethereum-based project that combines an **ERC721 smart contract** with a **React front end** to create a decentralized application (DApp) for minting Non-Fungible Tokens (NFTs). Let's break down the components:
 
 1. **Smart Contract**
 
@@ -8,9 +8,11 @@
     - Trust is established through code, making it transparent and tamper-proof.
     - Users can mint new NFTs, and the contract enforces their authenticity.
     - Developed using:
+        - [Solidity](https://soliditylang.org/)
+        - [OpenZeppelin](https://www.openzeppelin.com/contracts)
+        - [TypeScript](https://www.typescriptlang.org/)
         - [Hardhat](https://hardhat.org/)
         - [Viem](https://viem.sh/)
-        - [OpenZeppelin](https://www.openzeppelin.com/contracts)
 
 2. **Front End**
     - The front end provides a user-friendly interface for interacting with Honest NFT.
@@ -18,6 +20,8 @@
         - **Minting NFTs**: Users can create their own NFTs.
         - **Backoffice UI**: An administrative interface for managing the NFT drop.
     - Developed using:
+        - [TypeScript](https://www.typescriptlang.org/)
+        - [Vite]https://vitejs.dev/)
         - [React](https://react.dev/)
         - [React Query](https://tanstack.com/query/v3/)
         - [Ant Design](https://ant.design/)
