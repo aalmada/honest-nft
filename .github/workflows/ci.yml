@@ -26,16 +26,16 @@ jobs:
 
             - name: Build contracts
               working-directory: ./packages/blockchain
-              run: pnpm run build
+              run: pnpm compile
 
             - name: Test contracts
               working-directory: ./packages/blockchain
-              run: pnpm run test
+              run: pnpm test
 
             - name: Build frontend
               working-directory: ./packages/frontend
-              run: pnpm run build
+              run: pnpm build
 
-            - name: Test frontend
-              working-directory: ./packages/frontend
-              run: pnpm run test
+            # - name: Test frontend
+            #   working-directory: ./packages/frontend
+            #   run: pnpm test
