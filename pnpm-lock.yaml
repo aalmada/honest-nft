@@ -63,6 +63,9 @@ importers:
       antd:
         specifier: ^5.15.4
         version: 5.15.4(react-dom@18.2.0)(react@18.2.0)
+      antd-web3:
+        specifier: ^0.2.0
+        version: 0.2.0(antd@5.15.4)(react-dom@18.2.0)(react@18.2.0)(tslib@2.6.2)
       connectkit:
         specifier: ^1.7.2
         version: 1.7.2(@babel/core@7.24.3)(@tanstack/react-query@5.28.8)(react-dom@18.2.0)(react-is@18.2.0)(react@18.2.0)(viem@2.9.2)(wagmi@2.5.12)
@@ -5277,6 +5280,22 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /antd-web3@0.2.0(antd@5.15.4)(react-dom@18.2.0)(react@18.2.0)(tslib@2.6.2):
+    resolution: {integrity: sha512-CFXpIK7qnbRBvjtJaVwr2v+AOXQuM9FAXolfckYtnu2LHNC48WiIxV5eC3njLsucH2qlMTseFblJccd0ZsdCww==}
+    peerDependencies:
+      antd: ^5.0.0
+      react: ^18.0.0
+      react-dom: ^18.0.0
+      tslib: ^2.4.1
+    dependencies:
+      antd: 5.15.4(react-dom@18.2.0)(react@18.2.0)
+      clipboard-copy: 4.0.1
+      mersenne-twister: 1.1.0
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      tslib: 2.6.2
+    dev: false
+
   /antd@5.15.4(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-79eLOQW1DG92yzulx+ValfHFjvPnaaI41BffGquAnzx42Ws3eEcKofsa2jNRyJN5NWr9I5wqvABDq9rRRfGGsg==}
     peerDependencies:
@@ -5900,6 +5919,10 @@ packages:
     optionalDependencies:
       '@colors/colors': 1.5.0
     dev: true
+
+  /clipboard-copy@4.0.1:
+    resolution: {integrity: sha512-wOlqdqziE/NNTUJsfSgXmBMIrYmfd5V0HCGsR8uAKHcg+h9NENWINcfRjtWGU77wDHC8B8ijV4hMTGYbrKovng==}
+    dev: false
 
   /clipboardy@4.0.0:
     resolution: {integrity: sha512-5mOlNS0mhX0707P2I0aZ2V/cmHUEO/fL7VFLqszkhUsxt7RwnmrInf/eEQKlf5GzvYeHIjT+Ov1HRfNmymlG0w==}
@@ -8503,6 +8526,10 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
     dev: true
+
+  /mersenne-twister@1.1.0:
+    resolution: {integrity: sha512-mUYWsMKNrm4lfygPkL3OfGzOPTR2DBlTkBNHM//F6hGp8cLThY897crAlk3/Jo17LEOOjQUrNAx6DvgO77QJkA==}
+    dev: false
 
   /metro-babel-transformer@0.80.7:
     resolution: {integrity: sha512-b773yA16DsDQiM4OOzCsr1gwEd+iio9au98o3bj7F/bxVyoz1LuYox06BIdsiLL1o4kV5VtzTu3UXSJ2X0ZGXg==}
