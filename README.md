@@ -36,36 +36,40 @@
 
 2. **Install Dependencies:**
 
-    The repository is set up as a monorepo managed using [pnpm](https://pnpm.io/), a fast, disk space efficient package manager.
+    - The repository is set up as a monorepo managed using [pnpm](https://pnpm.io/), a fast, disk space efficient package manager.
 
-    Execute the following to install dependencies:
+    - Execute the following to install dependencies:
 
-    ```bash
-    pnpm install
-    ```
+        ```bash
+        pnpm install
+        ```
 
 3. **Deploy the Smart Contract:**
 
-    The smart contract development project is in folder `packages/blockchain`.
+    - The smart contract development project is in folder `packages/blockchain`.
 
-    Compile and deploy the smart contract:
+    - Add a `.env.local` file into the project folder. Copy the contents from the `.env.example` file.
 
-    ```bash
-    cd packages/blockchain
-    pnpm compile
-    pnpm hardhat run scripts/deploy.js --network sepolia
-    ```
+    - Compile and deploy the smart contract:
+
+        ```bash
+        cd packages/blockchain
+        pnpm compile
+        pnpm hardhat run scripts/deploy.js --network sepolia
+        ```
 
 4. **Start the React Development Server:**
 
-    The frontend development project is in folder `packages/frontend`.
+    - The frontend development project is in folder `packages/frontend`.
 
-    Execute the following to start the React server:
+    - Add a `.env.local` file into the project folder. Copy the contents from the `.env.example` file.
 
-    ```bash
-    cd packages/frontend
-    pnpm start
-    ```
+    - Execute the following to start the React server:
+
+        ```bash
+        cd packages/frontend
+        pnpm start
+        ```
 
 ## Usage
 
