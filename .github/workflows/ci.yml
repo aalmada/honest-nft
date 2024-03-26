@@ -22,7 +22,7 @@ jobs:
                   cache: 'pnpm'
 
             - name: Install dependencies
-              run: pnpm install´
+              run: pnpm install
 
             - name: Build contracts
               working-directory: ./packages/blockchain
