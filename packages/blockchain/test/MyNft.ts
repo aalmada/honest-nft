@@ -1,13 +1,15 @@
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import { getAddress } from 'viem';
+import { getAddress, ContractName, CN } from 'viem';
 
 describe('MyNft', function () {
+	const contractName: ContractName<CN> = 'MyNft';
+
 	const deployFixture = async () => {
 		const [deployer, otherAccount] = await hre.viem.getWalletClients();
-		const myNft = await hre.viem.deployContract('MyNft');
-		const myNftAsOtherAccount = await hre.viem.getContractAt('MyNft', myNft.address, {
+		const myNft = await hre.viem.deployContract(contractName);
+		const myNftAsOtherAccount = await hre.viem.getContractAt(contractName, myNft.address, {
 			client: { wallet: otherAccount }
 		});
 		const publicClient = await hre.viem.getPublicClient();
