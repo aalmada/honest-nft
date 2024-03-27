@@ -10,8 +10,11 @@ contract MyNft is ERC721, ERC721Pausable, AccessControlEnumerable {
 	bytes32 public immutable ADMIN_ROLE = keccak256('ADMIN_ROLE');
 	bytes32 public immutable MANAGER_ROLE = keccak256('MANAGER_ROLE');
 
-	constructor() 
-		ERC721('MyNFT', 'MNFT') 
+	constructor(
+		string memory name,
+		string memory symbol
+	) 
+		ERC721(name, symbol) 
 	{
 		// set ADMIN_ROLE as the admin of all roles
 		_setRoleAdmin(ADMIN_ROLE, ADMIN_ROLE);

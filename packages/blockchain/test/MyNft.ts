@@ -5,10 +5,12 @@ import { getAddress, ContractName, CN } from 'viem';
 
 describe('MyNft', function () {
 	const contractName: ContractName<CN> = 'MyNft';
+	const name: string = 'MyNFT';
+	const symbol: string = 'MNFT';
 
 	const deployFixture = async () => {
 		const [deployer, otherAccount] = await hre.viem.getWalletClients();
-		const myNft = await hre.viem.deployContract(contractName);
+		const myNft = await hre.viem.deployContract(contractName, [name, symbol]);
 		const myNftAsOtherAccount = await hre.viem.getContractAt(contractName, myNft.address, {
 			client: { wallet: otherAccount }
 		});
@@ -32,14 +34,14 @@ describe('MyNft', function () {
 	};
 
 	describe('Deployment', function () {
-		it('Should set the right name', async () => {
+		it('Should set the correct name', async () => {
 			const { myNft } = await loadFixture(deployFixture);
-			expect(await myNft.read.name()).to.equal('MyNFT');
+			expect(await myNft.read.name()).to.equal(name);
 		}).timeout(20_000);
 
-		it('Should set the right symbol', async () => {
+		it('Should set the correct symbol', async () => {
 			const { myNft } = await loadFixture(deployFixture);
-			expect(await myNft.read.symbol()).to.equal('MNFT');
+			expect(await myNft.read.symbol()).to.equal(symbol);
 		});
 
 		it('Should be paused', async () => {
