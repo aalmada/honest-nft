@@ -23,7 +23,7 @@
         - **Backoffice UI**: An administrative interface for managing the NFT drop.
     - Developed using:
         - [TypeScript](https://www.typescriptlang.org/)
-        - [Vite]https://vitejs.dev/)
+        - [Vite](https://vitejs.dev/)
         - [React](https://react.dev/)
         - [React Query](https://tanstack.com/query/v3/)
         - [Ant Design](https://ant.design/)
