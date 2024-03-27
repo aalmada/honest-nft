@@ -1,5 +1,7 @@
 # Honest NFT
 
+**Note:** This project is still under active development, and not all features are implemented. Expect frequent updates and changes.
+
 **Honest NFT** is an Ethereum-based project that combines an **ERC721 smart contract** with a **React front end** to create a decentralized application (DApp) for minting Non-Fungible Tokens (NFTs). Let's break down the components:
 
 1. **Smart Contract**
