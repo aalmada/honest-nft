@@ -16,14 +16,15 @@
         - [Hardhat](https://hardhat.org/)
         - [Viem](https://viem.sh/)
 
-2. **Front End**
-    - The front end provides a user-friendly interface for interacting with Honest NFT.
+2. **Client App**
+    - The web client app provides a user-friendly interface for interacting with Honest NFT.
     - Key features include:
         - **Minting NFTs**: Users can create their own NFTs.
         - **Backoffice UI**: An administrative interface for managing the NFT drop.
     - Developed using:
         - [TypeScript](https://www.typescriptlang.org/)
         - [Vite](https://vitejs.dev/)
+        - [Next.js](https://nextjs.org/)
         - [React](https://react.dev/)
         - [React Query](https://tanstack.com/query/v3/)
         - [Ant Design](https://ant.design/)
