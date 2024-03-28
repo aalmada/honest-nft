@@ -30,7 +30,7 @@ jobs:
 
             - name: Test contracts
               working-directory: ./packages/blockchain
-              run: pnpm test
+              run: pnpm test --typecheck
 
             - name: Build frontend
               working-directory: ./packages/frontend
