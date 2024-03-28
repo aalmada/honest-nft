@@ -4,8 +4,9 @@ import hre from 'hardhat';
 import { getAddress, ContractName, CN } from 'viem';
 
 describe('MyNft', function () {
+	const contractName: ContractName<CN> = 'MyNft';
+
 	const deployFixture = async () => {
-		const contractName: ContractName<CN> = 'MyNft';
 		const name: string = 'MyNFT';
 		const symbol: string = 'MNFT';
 		const unrevealedBaseURI: string = 'https://unrevealed.com/';
@@ -54,7 +55,7 @@ describe('MyNft', function () {
 		it('Should set the correct name', async () => {
 			const { myNft, name } = await loadFixture(deployFixture);
 			expect(await myNft.read.name()).to.equal(name);
-		}).timeout(20_000);
+		});
 
 		it('Should set the correct symbol', async () => {
 			const { myNft, symbol } = await loadFixture(deployFixture);
@@ -166,6 +167,11 @@ describe('MyNft', function () {
 			await expect(myNftAsOtherAccount.write.reveal([revealedBaseURI])).to.be.rejectedWith(
 				'AccessControlUnauthorizedAccount'
 			);
+		});
+
+		it('Should be rejected if base URI is empty', async () => {
+			const { myNft } = await loadFixture(unpausedFixture);
+			await expect(myNft.write.reveal([''])).to.be.rejectedWith('ArgumentEmpty');
 		});
 
 		it('Should be fulfilled', async () => {
