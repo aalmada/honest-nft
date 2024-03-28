@@ -7,7 +7,8 @@
 		"accounts": "hardhat run scripts/accounts.ts",
 		"compile": "hardhat compile",
 		"test": "hardhat test",
-		"start": "hardhat node"
+		"start": "hardhat node",
+		"solhint": "./node_modules/.bin/solhint -f table contracts/**/*.sol"
 	},
 	"keywords": [
 		"web3",
@@ -21,7 +22,8 @@
 		"@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
 		"dotenv": "^16.4.5",
 		"hardhat": "^2.22.2",
-		"hardhat-gas-reporter": "^2.0.2"
+		"hardhat-gas-reporter": "^2.0.2",
+		"solhint": "^4.5.2"
 	},
 	"dependencies": {
 		"@openzeppelin/contracts": "^5.0.2"
