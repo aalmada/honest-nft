@@ -20,7 +20,7 @@
 	"devDependencies": {
 		"@honest-nft/eslint-config-shared": "workspace:^",
 		"@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
-		"chai": "^5.1.0",
+		"chai": "^4.3.7",
 		"hardhat": "^2.22.2",
 		"hardhat-gas-reporter": "^2.0.2",
 		"solhint": "^4.5.2",
