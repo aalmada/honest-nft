@@ -2,6 +2,7 @@ import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpe
 import { expect } from 'chai';
 import hre from 'hardhat';
 import { getAddress, ContractName, CN } from 'viem';
+import { MyNft$Type } from '../artifacts/contracts/MyNft.sol/MyNft';
 
 describe('MyNft', function () {
 	const baseFixture = async () => {
@@ -127,7 +128,9 @@ describe('MyNft', function () {
 			const adminRole = await myNft.read.ADMIN_ROLE();
 			expect(await myNft.read.hasRole([adminRole, getAddress(deployer.account.address)])).to.equal(true);
 		});
+	});
 
+	describe('Access Control', function () {
 		it('Admin role should be admin of admin role', async () => {
 			const { myNft } = await loadFixture(deployedFixture);
 			const adminRole = await myNft.read.ADMIN_ROLE();
@@ -139,6 +142,22 @@ describe('MyNft', function () {
 			const adminRole = await myNft.read.ADMIN_ROLE();
 			const managerRole = await myNft.read.MANAGER_ROLE();
 			expect(await myNft.read.getRoleAdmin([managerRole])).to.equal(adminRole);
+		});
+
+		it('Revoke should be rejected if revoking sender', async () => {
+			const { myNft, deployer } = await loadFixture(deployedFixture);
+			const adminRole = await myNft.read.ADMIN_ROLE();
+			await expect(myNft.write.revokeRole([adminRole, getAddress(deployer.account.address)])).to.rejectedWith(
+				'NotSupported'
+			);
+		});
+
+		it('RenounceRole should be always rejected', async () => {
+			const { myNft, deployer } = await loadFixture(deployedFixture);
+			const adminRole = await myNft.read.ADMIN_ROLE();
+			await expect(myNft.write.revokeRole([adminRole, getAddress(deployer.account.address)])).to.rejectedWith(
+				'NotSupported'
+			);
 		});
 	});
 

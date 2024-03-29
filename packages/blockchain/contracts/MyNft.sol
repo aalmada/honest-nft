@@ -3,6 +3,8 @@ pragma solidity ^0.8.20;
 
 import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
+import { IAccessControl } from "@openzeppelin/contracts/access/IAccessControl.sol";
+import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 import { AccessControlEnumerable } from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
 import { Revealable } from "./Revealable.sol";
 
@@ -15,6 +17,7 @@ contract MyNft is ERC721, Pausable, Revealable, AccessControlEnumerable {
 
 	error ArgumentOutOfRange(string argName, uint256 actualValue);
 	error ArgumentEmpty(string argName);
+	error NotSupported();
 	error OutOfStock();
 
 	constructor(
@@ -59,6 +62,16 @@ contract MyNft is ERC721, Pausable, Revealable, AccessControlEnumerable {
 
 	function unpause() public onlyRole(ADMIN_ROLE) {
 		_unpause();
+	}
+
+	function revokeRole(bytes32 role, address account) public virtual override(AccessControl, IAccessControl) onlyRole(getRoleAdmin(role)) {
+		if(account == _msgSender()) revert NotSupported();
+		
+		super.revokeRole(role, account);
+	}
+
+	function renounceRole(bytes32, address) public virtual override(AccessControl, IAccessControl) {
+		revert NotSupported();
 	}
 
 	function safeMint(address to) public onlyRole(ADMIN_ROLE) whenNotPaused {
