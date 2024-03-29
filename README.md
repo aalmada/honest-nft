@@ -54,7 +54,10 @@
 
     - The smart contract development project is in folder `packages/blockchain`.
 
-    - Add a `.env.local` file into the project folder. Copy the contents from the `.env.example` file.
+    - Set the following [configuration variables](https://hardhat.org/hardhat-runner/docs/guides/configuration-variables):
+
+        - `COINMARKETCAP_KEY` - Used to get fiat values in gas reports. Get key from https://coinmarketcap.com/api/pricing/.
+        - `ETHERSCAN_API` - Used to verify contract on Etherscan. Get key from https://etherscan.io/apis.
 
     - Compile and deploy the smart contract:
 
