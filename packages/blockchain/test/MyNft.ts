@@ -4,35 +4,47 @@ import hre from 'hardhat';
 import { getAddress, ContractName, CN } from 'viem';
 
 describe('MyNft', function () {
-	const contractName: ContractName<CN> = 'MyNft';
-
-	const deployFixture = async () => {
+	const baseFixture = async () => {
+		const contractName: ContractName<CN> = 'MyNft';
 		const name: string = 'MyNFT';
 		const symbol: string = 'MNFT';
 		const unrevealedBaseURI: string = 'https://unrevealed.com/';
 		const maxSupply: bigint = 10n;
 		const [deployer, otherAccount] = await hre.viem.getWalletClients();
-
-		const myNft = await hre.viem.deployContract(contractName, [name, symbol, unrevealedBaseURI, maxSupply]);
-		const myNftAsOtherAccount = await hre.viem.getContractAt(contractName, myNft.address, {
-			client: { wallet: otherAccount }
-		});
 		const publicClient = await hre.viem.getPublicClient();
 		return {
-			myNft,
-			myNftAsOtherAccount,
-			deployer,
-			otherAccount,
+			contractName,
 			name,
 			symbol,
 			unrevealedBaseURI,
 			maxSupply,
+			deployer,
+			otherAccount,
 			publicClient
 		};
 	};
 
+	const deployedFixture = async () => {
+		const { contractName, name, symbol, unrevealedBaseURI, maxSupply, otherAccount, ...other } =
+			await loadFixture(baseFixture);
+		const myNft = await hre.viem.deployContract(contractName, [name, symbol, unrevealedBaseURI, maxSupply]);
+		const myNftAsOtherAccount = await hre.viem.getContractAt(contractName, myNft.address, {
+			client: { wallet: otherAccount }
+		});
+		return {
+			myNft,
+			myNftAsOtherAccount,
+			name,
+			symbol,
+			unrevealedBaseURI,
+			maxSupply,
+			otherAccount,
+			...other
+		};
+	};
+
 	const unpausedFixture = async () => {
-		const { myNft, ...other } = await loadFixture(deployFixture);
+		const { myNft, ...other } = await loadFixture(deployedFixture);
 		await myNft.write.unpause();
 		return {
 			myNft,
@@ -52,50 +64,78 @@ describe('MyNft', function () {
 	};
 
 	describe('Deployment', function () {
+		it('Should be rejected if name is empty', async () => {
+			const { contractName, symbol, unrevealedBaseURI, maxSupply } = await loadFixture(baseFixture);
+			await expect(
+				hre.viem.deployContract(contractName, ['', symbol, unrevealedBaseURI, maxSupply])
+			).to.be.rejectedWith('ArgumentEmpty("name")');
+		});
+
+		it('Should be rejected if symbol is empty', async () => {
+			const { contractName, name, unrevealedBaseURI, maxSupply } = await loadFixture(baseFixture);
+			await expect(
+				hre.viem.deployContract(contractName, [name, '', unrevealedBaseURI, maxSupply])
+			).to.be.rejectedWith('ArgumentEmpty("symbol")');
+		});
+
+		it('Should be rejected if base URI is empty', async () => {
+			const { contractName, name, symbol, maxSupply } = await loadFixture(baseFixture);
+			await expect(hre.viem.deployContract(contractName, [name, symbol, '', maxSupply])).to.be.rejectedWith(
+				'ArgumentEmpty("notRevealedBaseURI")'
+			);
+		});
+
+		it('Should be rejected if max supply is zero', async () => {
+			const { contractName, name, symbol, unrevealedBaseURI } = await loadFixture(baseFixture);
+			await expect(
+				hre.viem.deployContract(contractName, [name, symbol, unrevealedBaseURI, 0n])
+			).to.be.rejectedWith('ArgumentOutOfRange("maxSupply", 0)');
+		});
+
 		it('Should set the correct name', async () => {
-			const { myNft, name } = await loadFixture(deployFixture);
+			const { myNft, name } = await loadFixture(deployedFixture);
 			expect(await myNft.read.name()).to.equal(name);
 		});
 
 		it('Should set the correct symbol', async () => {
-			const { myNft, symbol } = await loadFixture(deployFixture);
+			const { myNft, symbol } = await loadFixture(deployedFixture);
 			expect(await myNft.read.symbol()).to.equal(symbol);
 		});
 
 		it('Should be unrevealed', async () => {
-			const { myNft } = await loadFixture(deployFixture);
+			const { myNft } = await loadFixture(deployedFixture);
 			expect(await myNft.read.revealed()).to.equal(false);
 		});
 
 		it('Should set the correct unrevealed base URI', async () => {
-			const { myNft, unrevealedBaseURI } = await loadFixture(deployFixture);
+			const { myNft, unrevealedBaseURI } = await loadFixture(deployedFixture);
 			expect(await myNft.read.baseURI()).to.equal(unrevealedBaseURI);
 		});
 
 		it('Should set the correct maximum supply', async () => {
-			const { myNft, maxSupply } = await loadFixture(deployFixture);
+			const { myNft, maxSupply } = await loadFixture(deployedFixture);
 			expect(await myNft.read.MAX_SUPPLY()).to.equal(maxSupply);
 		});
 
 		it('Should be paused', async () => {
-			const { myNft } = await loadFixture(deployFixture);
+			const { myNft } = await loadFixture(deployedFixture);
 			expect(await myNft.read.paused()).to.equal(true);
 		});
 
 		it('Deployer should have admin role', async () => {
-			const { myNft, deployer } = await loadFixture(deployFixture);
+			const { myNft, deployer } = await loadFixture(deployedFixture);
 			const adminRole = await myNft.read.ADMIN_ROLE();
 			expect(await myNft.read.hasRole([adminRole, getAddress(deployer.account.address)])).to.equal(true);
 		});
 
 		it('Admin role should be admin of admin role', async () => {
-			const { myNft } = await loadFixture(deployFixture);
+			const { myNft } = await loadFixture(deployedFixture);
 			const adminRole = await myNft.read.ADMIN_ROLE();
 			expect(await myNft.read.getRoleAdmin([adminRole])).to.equal(adminRole);
 		});
 
 		it('Admin role should be admin of manager role', async () => {
-			const { myNft } = await loadFixture(deployFixture);
+			const { myNft } = await loadFixture(deployedFixture);
 			const adminRole = await myNft.read.ADMIN_ROLE();
 			const managerRole = await myNft.read.MANAGER_ROLE();
 			expect(await myNft.read.getRoleAdmin([managerRole])).to.equal(adminRole);
@@ -104,17 +144,17 @@ describe('MyNft', function () {
 
 	describe('Pausable', function () {
 		it('Unpause should be rejected if not administrator', async () => {
-			const { myNftAsOtherAccount } = await loadFixture(deployFixture);
+			const { myNftAsOtherAccount } = await loadFixture(deployedFixture);
 			await expect(myNftAsOtherAccount.write.unpause()).to.be.rejectedWith('AccessControlUnauthorizedAccount');
 		});
 
 		it('Unpause should be fulfilled if paused', async () => {
-			const { myNft } = await loadFixture(deployFixture);
+			const { myNft } = await loadFixture(deployedFixture);
 			await expect(myNft.write.unpause()).to.be.fulfilled;
 		});
 
 		it('Pause should be rejected if already paused', async () => {
-			const { myNft } = await loadFixture(deployFixture);
+			const { myNft } = await loadFixture(deployedFixture);
 			await expect(myNft.write.pause()).to.be.rejectedWith('EnforcedPause');
 		});
 
@@ -136,7 +176,7 @@ describe('MyNft', function () {
 
 	describe('Mint', function () {
 		it('Should be rejected if paused', async () => {
-			const { myNft, otherAccount } = await loadFixture(deployFixture);
+			const { myNft, otherAccount } = await loadFixture(deployedFixture);
 			await expect(myNft.write.safeMint([getAddress(otherAccount.account.address)])).to.be.rejectedWith(
 				'EnforcedPause'
 			);

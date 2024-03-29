@@ -23,6 +23,8 @@ contract MyNft is ERC721, Pausable, Revealable, AccessControlEnumerable {
 		string memory notRevealedBaseURI,
 		uint256 maxSupply
 	) ERC721(name, symbol) {
+		if (bytes(name).length == 0) revert ArgumentEmpty("name");
+		if (bytes(symbol).length == 0) revert ArgumentEmpty("symbol");
 		if (bytes(notRevealedBaseURI).length == 0) revert ArgumentEmpty("notRevealedBaseURI");
 		if (maxSupply == 0) revert ArgumentOutOfRange("maxSupply", maxSupply);
 
