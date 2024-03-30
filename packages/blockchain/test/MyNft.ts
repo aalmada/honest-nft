@@ -2,7 +2,6 @@ import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpe
 import { expect } from 'chai';
 import hre from 'hardhat';
 import { getAddress, ContractName, CN } from 'viem';
-import { MyNft$Type } from '../artifacts/contracts/MyNft.sol/MyNft';
 
 describe('MyNft', function () {
 	const baseFixture = async () => {
@@ -32,9 +31,14 @@ describe('MyNft', function () {
 		const myNftAsOtherAccount = await hre.viem.getContractAt(contractName, myNft.address, {
 			client: { wallet: otherAccount }
 		});
+		const adminRole = await myNft.read.ADMIN_ROLE();
+		const managerRole = await myNft.read.MANAGER_ROLE();
+
 		return {
 			myNft,
 			myNftAsOtherAccount,
+			adminRole,
+			managerRole,
 			name,
 			symbol,
 			unrevealedBaseURI,
@@ -124,37 +128,31 @@ describe('MyNft', function () {
 		});
 
 		it('Deployer should have admin role', async () => {
-			const { myNft, deployer } = await loadFixture(deployedFixture);
-			const adminRole = await myNft.read.ADMIN_ROLE();
+			const { myNft, deployer, adminRole } = await loadFixture(deployedFixture);
 			expect(await myNft.read.hasRole([adminRole, getAddress(deployer.account.address)])).to.equal(true);
 		});
 	});
 
 	describe('Access Control', function () {
 		it('Admin role should be admin of admin role', async () => {
-			const { myNft } = await loadFixture(deployedFixture);
-			const adminRole = await myNft.read.ADMIN_ROLE();
+			const { myNft, adminRole } = await loadFixture(deployedFixture);
 			expect(await myNft.read.getRoleAdmin([adminRole])).to.equal(adminRole);
 		});
 
 		it('Admin role should be admin of manager role', async () => {
-			const { myNft } = await loadFixture(deployedFixture);
-			const adminRole = await myNft.read.ADMIN_ROLE();
-			const managerRole = await myNft.read.MANAGER_ROLE();
+			const { myNft, adminRole, managerRole } = await loadFixture(deployedFixture);
 			expect(await myNft.read.getRoleAdmin([managerRole])).to.equal(adminRole);
 		});
 
 		it('Revoke should be rejected if revoking sender', async () => {
-			const { myNft, deployer } = await loadFixture(deployedFixture);
-			const adminRole = await myNft.read.ADMIN_ROLE();
+			const { myNft, deployer, adminRole } = await loadFixture(deployedFixture);
 			await expect(myNft.write.revokeRole([adminRole, getAddress(deployer.account.address)])).to.rejectedWith(
 				'NotSupported'
 			);
 		});
 
-		it('RenounceRole should be always rejected', async () => {
-			const { myNft, deployer } = await loadFixture(deployedFixture);
-			const adminRole = await myNft.read.ADMIN_ROLE();
+		it('Renounce should be always rejected', async () => {
+			const { myNft, deployer, adminRole } = await loadFixture(deployedFixture);
 			await expect(myNft.write.revokeRole([adminRole, getAddress(deployer.account.address)])).to.rejectedWith(
 				'NotSupported'
 			);
