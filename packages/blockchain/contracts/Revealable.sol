@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {Context} from "@openzeppelin/contracts/utils/Context.sol";
+import { Context } from "@openzeppelin/contracts/utils/Context.sol";
 
 /**
  * @dev Contract module which allows children to implement an revealer mechanism.
@@ -12,7 +12,7 @@ import {Context} from "@openzeppelin/contracts/utils/Context.sol";
  * simply including this module, only once the modifiers are put in place.
  */
 abstract contract Revealable is Context {
-    bool private _revealed;
+    bool public revealed;
 
     /**
      * @dev Emitted when the reveal is triggered by `account`.
@@ -33,7 +33,7 @@ abstract contract Revealable is Context {
      * @dev Initializes the contract in not revealed state.
      */
     constructor() {
-        _revealed = false;
+        revealed = false;
     }
 
     /**
@@ -61,17 +61,10 @@ abstract contract Revealable is Context {
     }
 
     /**
-     * @dev Returns true if the contract is revealed, and false otherwise.
-     */
-    function revealed() public view virtual returns (bool) {
-        return _revealed;
-    }
-
-    /**
      * @dev Throws if the contract is revealed.
      */
     function _requireNotRevealed() internal view virtual {
-        if (revealed()) {
+        if (revealed) {
             revert EnforcedReveal();
         }
     }
@@ -80,7 +73,7 @@ abstract contract Revealable is Context {
      * @dev Throws if the contract is not revealed.
      */
     function _requireRevealed() internal view virtual {
-        if (!revealed()) {
+        if (!revealed) {
             revert ExpectedReveal();
         }
     }
@@ -93,7 +86,7 @@ abstract contract Revealable is Context {
      * - The contract must not be revealed.
      */
     function _reveal() internal virtual whenNotRevealed {
-        _revealed = true;
+        revealed = true;
         emit Revealed(_msgSender());
     }
 }

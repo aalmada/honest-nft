@@ -1,9 +1,17 @@
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox-viem/network-helpers';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import { getAddress, ContractName, CN } from 'viem';
+import { getAddress, ContractName, CN, keccak256, encodePacked, Hex, zeroHash, parseEther } from 'viem';
+import { MerkleTree } from 'merkletreejs';
 
 describe('MyNft', function () {
+	type MerkleLeaf = { account: Hex; id: bigint };
+
+	const getHash = (leaf: MerkleLeaf): Hex => keccak256(encodePacked(['uint256', 'address'], [leaf.id, leaf.account]));
+
+	const createMerkleTree = (leaves: MerkleLeaf[]): MerkleTree =>
+		new MerkleTree(leaves.map(getHash), keccak256, { sort: true });
+
 	const baseFixture = async () => {
 		const contractName: ContractName<CN> = 'MyNft';
 		const name: string = 'MyNFT';
@@ -64,6 +72,48 @@ describe('MyNft', function () {
 		return {
 			myNft,
 			revealedBaseURI,
+			...other
+		};
+	};
+
+	const claimsHandlerFixture = async () => {
+		const { myNft, deployer, otherAccount, ...other } = await loadFixture(unpausedFixture);
+		const leaves: MerkleLeaf[] = [
+			{
+				account: getAddress(deployer.account.address),
+				id: 0n
+			},
+			{
+				account: getAddress(otherAccount.account.address),
+				id: 1n
+			}
+		];
+		const merkleTree = createMerkleTree(leaves);
+		const validator = merkleTree.getHexRoot() as Hex;
+		const claims = leaves.map((leaf) => ({ ...leaf, proof: merkleTree.getHexProof(getHash(leaf)) }));
+
+		const otherLeaves: MerkleLeaf[] = [
+			{
+				account: getAddress(deployer.account.address),
+				id: 0n
+			}
+		];
+		const otherMerkleTree = createMerkleTree(otherLeaves);
+		const otherValidator = otherMerkleTree.getHexRoot() as Hex;
+		const otherClaims = leaves.map((leaf) => ({ ...leaf, proof: otherMerkleTree.getHexProof(getHash(leaf)) }));
+
+		await myNft.write.setValidator([validator]);
+
+		const claimCost = parseEther('0.001');
+		await myNft.write.setClaimCost([claimCost]);
+
+		return {
+			myNft,
+			validator,
+			claims,
+			claimCost,
+			otherValidator,
+			otherClaims,
 			...other
 		};
 	};
@@ -130,6 +180,11 @@ describe('MyNft', function () {
 		it('Deployer should have admin role', async () => {
 			const { myNft, deployer, adminRole } = await loadFixture(deployedFixture);
 			expect(await myNft.read.hasRole([adminRole, getAddress(deployer.account.address)])).to.equal(true);
+		});
+
+		it('Claims handler should be disabled', async () => {
+			const { myNft } = await loadFixture(deployedFixture);
+			expect(await myNft.read.claimingEnabled()).to.be.equal(false);
 		});
 	});
 
@@ -244,6 +299,52 @@ describe('MyNft', function () {
 		it('Should set the correct unrevealed base URI', async () => {
 			const { myNft, revealedBaseURI } = await loadFixture(revealedFixture);
 			expect(await myNft.read.baseURI()).to.equal(revealedBaseURI);
+		});
+	});
+
+	describe('Claims Handler', function () {
+		it('Should set the correct validator', async () => {
+			const { myNft, validator } = await loadFixture(claimsHandlerFixture);
+			expect(await myNft.read.validator()).to.equal(validator);
+		});
+
+		it('Set validator should be rejected if already set', async () => {
+			const { myNft, otherValidator } = await loadFixture(claimsHandlerFixture);
+			await expect(myNft.write.setValidator([otherValidator])).to.be.rejectedWith('EnforceValidator');
+		});
+
+		it('Set validator should be rejected if not administrator', async () => {
+			const { myNftAsOtherAccount, otherValidator } = await loadFixture(claimsHandlerFixture);
+			await expect(myNftAsOtherAccount.write.setValidator([otherValidator])).to.be.rejectedWith(
+				'AccessControlUnauthorizedAccount'
+			);
+		});
+
+		it('Set claim cost should be rejected if not administrator', async () => {
+			const { myNftAsOtherAccount } = await loadFixture(claimsHandlerFixture);
+			const cost = parseEther('0.1');
+			await expect(myNftAsOtherAccount.write.setClaimCost([cost])).to.be.rejectedWith(
+				'AccessControlUnauthorizedAccount'
+			);
+		});
+
+		it('Claim should be fullfiled', async () => {
+			const { myNft, claims, claimCost } = await loadFixture(claimsHandlerFixture);
+			const { id, proof } = claims[0];
+			await expect(myNft.write.claim([id, proof], { value: claimCost })).to.be.fulfilled;
+		});
+
+		it('Claim should be rejected if wrong pair of id and proof', async () => {
+			const { myNft, otherClaims, claimCost } = await loadFixture(claimsHandlerFixture);
+			const { id, proof } = otherClaims[0];
+			await expect(myNft.write.claim([id, proof], { value: claimCost })).to.be.rejectedWith('InvalidProof');
+		});
+
+		it('Claim should be rejected if validator not set', async () => {
+			const { myNft, claims, claimCost } = await loadFixture(claimsHandlerFixture);
+			const { id, proof } = claims[0];
+			await myNft.write.setValidator([zeroHash]);
+			await expect(myNft.write.claim([id, proof], { value: claimCost })).to.be.rejectedWith('ExpectedValidator');
 		});
 	});
 });
